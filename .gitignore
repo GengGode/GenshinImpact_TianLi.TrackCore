@@ -1,0 +1,8 @@
+/out/build/x64-Debug/
+/cmake-build-release-visual-studio-2019/bin/
+/cmake-build-release-visual-studio-2019/CMakeFiles/
+/cmake-build-release-visual-studio-2019/.cmake/api/v1/
+/.idea/
+/.vs/
+/cmake-build-debug-visual-studio-2019/
+/cmake-build-release-visual-studio-2019/
