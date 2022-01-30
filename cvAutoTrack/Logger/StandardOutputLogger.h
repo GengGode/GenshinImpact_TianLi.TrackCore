@@ -5,12 +5,14 @@
 #include <thread>
 #include <iostream>
 #include <queue>
+#include <mutex>
 
 class StandardOutputLogger:public LoggingFacility 
 {
     std::thread* _threadInstance= nullptr;
     std::queue<std::string> _logQueue;
     std::atomic<bool> _isRunning;
+    std::mutex _mutex;
 public:
     std::string _coutNowTimeInfo;
     std::string _objectMessage;
@@ -71,6 +73,7 @@ public:
 protected:
     void push(std::string message)
     {
+        std::lock_guard lock(_mutex);
         append(message);
     }
 
@@ -95,7 +98,8 @@ private:
             }
             else
             {
-                std::this_thread::sleep_for(std::chrono::milliseconds(100));
+                //TODO: Ïß³ÌÐÝÃß
+                std::this_thread::sleep_for(std::chrono::microseconds (100));
             }
         }
     }

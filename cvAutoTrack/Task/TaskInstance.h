@@ -23,6 +23,7 @@ public:
     std::atomic<bool> _isWorkEnd;
 
     std::any _value_output;
+    std::any _value_input;
 
     std::function<void()> _task;
     TaskInstance()=delete;
@@ -61,8 +62,9 @@ public:
             }
             else
             {
-                //log->Log("service stop");
-                std::this_thread::sleep_for(std::chrono::microseconds (1));
+
+                //TODO: 线程休眠
+                std::this_thread::sleep_for(std::chrono::microseconds (10));
             }
         }
         log->Log("end thread");
@@ -87,10 +89,17 @@ public:
     {
         _isStartService=false;
     }
-
+    void setInputValue(std::any value)
+    {
+        _value_input=value;
+    }
     void setOutputValue(std::any value)
     {
         _value_output=value;
+    }
+    std::any getInputValue()
+    {
+        return _value_input;
     }
     std::any getOutputValue()
     {

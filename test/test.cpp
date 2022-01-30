@@ -17,12 +17,12 @@ int main()
 
     startService();
 
- GetDirection(a);
- GetRotation(a2);
+    GetDirection(a);
+    GetRotation(a2);
 
-    std::this_thread::sleep_for(std::chrono::seconds(3));
+    std::this_thread::sleep_for(std::chrono::seconds(120));
 
- stopService();
+    stopService();
 
     std::this_thread::sleep_for(std::chrono::seconds(1));
 

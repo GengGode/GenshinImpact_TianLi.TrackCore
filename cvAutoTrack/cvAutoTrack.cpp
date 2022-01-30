@@ -1,7 +1,11 @@
 #include "cvAutoTrack.h"
-#include "AutoTrackManagement.h"
-
-static AutoTrackManagement _AutoTrackManagement;
+#ifdef 摆烂
+// #include "AutoTrackManagement.h"
+// static AutoTrackManagement _AutoTrackManagement;
+#else
+#include "BaiLan/BaiLan.h"
+static BaiLan _AutoTrackManagement;
+#endif
 
 bool __stdcall startService()
 {

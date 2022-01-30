@@ -40,6 +40,9 @@ bool Screenshot::screenshot()
 
     getGenshinImpactScale();
 
+    //log -> Log("½ØÍ¼Ä£¿é¿ªÊ¼½ØÍ¼");
+    //log ->Info ("giClientSize :" + std::to_string(giClientSize.width) + "," + std::to_string(giClientSize.height));
+
     BITMAP bmp;
 
     DeleteObject(hBmp);
@@ -83,6 +86,7 @@ bool Screenshot::screenshot()
 
     giFrame = giFrame(cv::Rect(giClientRect.left, giClientRect.top, giClientSize.width, giClientSize.height));
 
+    //log->Info("giFrame size:"+std::to_string(giFrame.size().width)+"*"+std::to_string(giFrame.size().height) );
 
     if (giFrame.empty())
     {

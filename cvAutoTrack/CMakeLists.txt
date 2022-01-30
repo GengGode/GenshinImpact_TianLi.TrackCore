@@ -23,10 +23,21 @@ link_directories(C:/tmp/opencv_455/install/install_build_Shared_World/x64/vc16/l
 #set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
 #set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
 aux_source_directory(. cvAutoTrack_src)
+aux_source_directory(./BaiLan cvAutoTrack_src)
+aux_source_directory(./Data cvAutoTrack_src)
+aux_source_directory(./GenshinFunction cvAutoTrack_src)
+aux_source_directory(./GenshinFunction/Flow cvAutoTrack_src)
+aux_source_directory(./GenshinFunction/HookHandle cvAutoTrack_src)
+aux_source_directory(./GenshinFunction/Screenshot cvAutoTrack_src)
+aux_source_directory(./GenshinFunction/SplitDispense cvAutoTrack_src)
+aux_source_directory(./Logger cvAutoTrack_src)
+aux_source_directory(./Task cvAutoTrack_src)
+aux_source_directory(./Timer cvAutoTrack_src)
 
-#add_library(cvAutoTrack STATIC ${cvAutoTrack_src})
 
-add_library(cvAutoTrack SHARED ${cvAutoTrack_src} Task/TaskFacility.h Task/TaskInstance.h Task/Task_HookHandle.h GenshinFunction/HookHandle/HookHandle.h GenshinFunction/HookHandle/HookHandle.cpp Task/Task_HookHandle.cpp GenshinFunction/Screenshot/Screenshot.cpp GenshinFunction/Screenshot/Screenshot.h GenshinFunction/Flow/FlowFacility.cpp GenshinFunction/Flow/FlowFacility.h GenshinFunction/HookHandle/HookerFacility.h GenshinFunction/HookHandle/Hooker_TengXunYunYouXi.h GenshinFunction/HookHandle/Hooker_YuanShen.h Task/Task_Screenshot.h GenshinFunction/WorkFacility.h "Data/DataFacility.h" "Data/Data_GenshinImpact.h" "Data/DataTypeBase.h" "GenshinFunction/WorkNode.h" Logger/LoggerError.h Task/Task_Screenshot.cpp GenshinFunction/SplitDispense/SplitDispense.cpp GenshinFunction/SplitDispense/SplitDispense.h Task/Task_SplitDispense.cpp Task/Task_SplitDispense.h Task/Task_Spilt.cpp Task/Task_Spilt.h)
+# add_library(cvAutoTrack STATIC ${cvAutoTrack_src})
+
+ add_library(cvAutoTrack SHARED ${cvAutoTrack_src} BaiLan/BaiLan_Util.h BaiLan/BaiLan_Util_SplitArea.h BaiLan/BaiLan_Util_SplitMatching.cpp BaiLan/BaiLan_Util_SplitMatching.h BaiLan/BaiLan_Util_SplitMatching_InstanceWork.h)
 
 # add_library(cvAutoTrack_static STATIC ${cvAutoTrack_src})
 #
@@ -35,4 +46,5 @@ add_library(cvAutoTrack SHARED ${cvAutoTrack_src} Task/TaskFacility.h Task/TaskI
 # set_target_properties(cvAutoTrack PROPERTIES CLEAN_DIRECT_OUTPUT 1)
 # set_target_properties(cvAutoTrack_static PROPERTIES CLEAN_DIRECT_OUTPUT 1)
 
-target_link_libraries(cvAutoTrack C:/tmp/opencv_455/install/install_build_Shared_World/x64/vc16/lib/opencv_world455d.lib)
+# target_link_libraries(cvAutoTrack C:/tmp/opencv_455/install/install_build_Shared_World/x64/vc16/lib/opencv_world455d.lib)
+target_link_libraries(cvAutoTrack C:/tmp/opencv_455/install/install_build_Shared_World/x64/vc16/lib/opencv_world455.lib)

@@ -105,14 +105,15 @@ void AutoTrackManagement::service() {
                 }
 
 
+                //TODO: 线程休眠
                 std::this_thread::sleep_for(std::chrono::seconds (1));
 
             }
         }
         else
         {
-            //log->Log("service stop");
-            std::this_thread::sleep_for(std::chrono::microseconds (1));
+            //TODO: 线程休眠
+            std::this_thread::sleep_for(std::chrono::seconds (1));
         }
     }
     log->Log("结束服务主线程");

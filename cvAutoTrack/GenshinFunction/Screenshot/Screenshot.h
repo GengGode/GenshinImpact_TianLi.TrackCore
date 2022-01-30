@@ -15,7 +15,7 @@ class Screenshot {
     RECT giClientRect;
     cv::Size giClientSize;
 
-    double screen_scale;
+    double screen_scale=1.0;
     int err;
     bool result=false;
     std::mutex lm_output;
@@ -31,6 +31,10 @@ public:
     void work();
     void setValue(const HWND& handle)
     {
+        if(giHandle==handle)
+        {
+            return;
+        }
         std::lock_guard<std::mutex> lock(lm_input);
         giHandle=handle;
     }
@@ -40,8 +44,9 @@ public:
         return ret;
     }
     //void signal();
-private:
     bool screenshot();
+
+private:
     void getGenshinImpactScale();
 };
 
