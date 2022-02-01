@@ -16,17 +16,16 @@ int main()
     std::cout<<"hello world\n";
 
     startService();
-
-    GetDirection(a);
-    GetRotation(a2);
-
-    std::this_thread::sleep_for(std::chrono::seconds(120));
-
-    stopService();
-
-    std::this_thread::sleep_for(std::chrono::seconds(1));
-
-
+    while(1)
+    {
+        GetDirection(a);
+        GetRotation(a2);
+        
+        std::cout<<"a:"<<a<<"\n";
+        std::cout<<"a2:"<<a2<<"\n";
+        std::cout<<"\n";
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    }
     std::cout<<"bay world\n";
     return 0;
 }

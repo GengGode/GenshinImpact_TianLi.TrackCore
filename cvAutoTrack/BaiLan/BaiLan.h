@@ -162,7 +162,18 @@ private:
 
     //获取分发5——右侧已捡取物品的识别区域
     void get_GI_Split_5_RightGetItemsArea_server();
-
+    
+    void foo_test_show_Frame() const;
+    
+    void foo_test_show_PaimonArea();
+    
+    void foo_test_show_MiniMapArea();
+    
+    void foo_test_show_UIDArea();
+    
+    void foo_test_show_LeftGetItemsArea();
+    
+    void foo_test_show_RightGetItemsArea();
 };
 
 #endif //CVAUTOTRACKDLL_BAILAN_H/
