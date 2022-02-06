@@ -23,7 +23,6 @@ int main()
         
         std::cout<<"a:"<<a<<"\n";
         std::cout<<"a2:"<<a2<<"\n";
-        std::cout<<"\n";
         std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     }
     std::cout<<"bay world\n";
