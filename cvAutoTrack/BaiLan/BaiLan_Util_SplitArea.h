@@ -155,10 +155,10 @@ private:
         mayArea[3] = Area_LeftGetItems_mayArea;
 
         // 右侧可捡取物品可能性区域计算参数
-        int rightGetItems_mayArea_left=        static_cast<int>(x * 0.050);
-        int rightGetItems_mayArea_top=         static_cast<int>(y * 0.460);
-        int rightGetItems_mayArea_width=       static_cast<int>(x * 0.160);
-        int rightGetItems_mayArea_height=      static_cast<int>(y * 0.480);
+        int rightGetItems_mayArea_left=       static_cast<int>(x * 0.050);
+        int rightGetItems_mayArea_top=        static_cast<int>(y * 0.460);
+        int rightGetItems_mayArea_width=      static_cast<int>(x * 0.160);
+        int rightGetItems_mayArea_height=     static_cast<int>(y * 0.480);
         // 右侧可捡取物品可能性区域
         cv::Rect Area_RightGetItems_mayArea(
                 rightGetItems_mayArea_left,
