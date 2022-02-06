@@ -4,14 +4,17 @@ struct Transform {
 	bool result;
 	double x, y, a;
 };
+/* 角色位置 */
 struct Position {
 	bool result;
 	double x, y;
 };
+/* 角色朝向 */
 struct Direction {
 	bool result;
 	double a;
 };
+/* 视角朝向 */
 struct Rotation {
 	bool result;
 	double a2;
