@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.21)
-project(cvAutoTrack)
+project(cvAutoTrack  VERSION 7.0.0)
 # set(CMAKE_CXX_STANDARD 20)
 # add_library(cvAutoTrack SHARED cvAutoTrack/library.cpp)
 
@@ -34,10 +34,16 @@ aux_source_directory(./Logger cvAutoTrack_src)
 aux_source_directory(./Task cvAutoTrack_src)
 aux_source_directory(./Timer cvAutoTrack_src)
 
+# 调试输出cmake路径
 
+
+if(MSVC)
+ set(MY_VERSIONINFO_RC "${CMAKE_BINARY_DIR}/resource.rc" BaiLan/BaiLan_Util_Matching.cpp BaiLan/BaiLan_Util_Matching.h BaiLan/BaiLan_Util_Resource.cpp BaiLan/BaiLan_Util_Resource.h)
+ configure_file("${CMAKE_SOURCE_DIR}/cvAutoTrack/resource.rc.in" "${MY_VERSIONINFO_RC}")
+endif()
 # add_library(cvAutoTrack STATIC ${cvAutoTrack_src})
 
- add_library(cvAutoTrack SHARED ${cvAutoTrack_src} BaiLan/BaiLan_Util.h BaiLan/BaiLan_Util_SplitArea.h BaiLan/BaiLan_Util_SplitMatching.cpp BaiLan/BaiLan_Util_SplitMatching.h BaiLan/BaiLan_Util_SplitMatching_InstanceWork.h)
+ add_library(cvAutoTrack SHARED ${cvAutoTrack_src} ${MY_VERSIONINFO_RC} BaiLan/resource/cvAutoTrack.rc BaiLan/BaiLan_Util.h BaiLan/BaiLan_Util_SplitArea.h BaiLan/BaiLan_Util_SplitMatching.cpp BaiLan/BaiLan_Util_SplitMatching.h BaiLan/BaiLan_Util_SplitMatching_InstanceWork.h)
 
 # add_library(cvAutoTrack_static STATIC ${cvAutoTrack_src})
 #

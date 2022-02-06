@@ -1,0 +1,88 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "winres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// ����(���壬�й�) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
+LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED
+#pragma code_page(936)
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""winres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_BITMAP_STAR         BITMAP                  "BaiLan\\resource\\GISTARTEMPLATE.bmp"
+IDB_BITMAP_PAIMON       BITMAP                  "BaiLan\\resource\\GIPAIMON.bmp"
+IDB_BITMAP_UID_         BITMAP                  "BaiLan\\resource\\png\\uid_.bmp"
+IDB_BITMAP_UID0         BITMAP                  "BaiLan\\resource\\png\\uid0.bmp"
+IDB_BITMAP_UID1         BITMAP                  "BaiLan\\resource\\png\\uid1.bmp"
+IDB_BITMAP_UID2         BITMAP                  "BaiLan\\resource\\png\\uid2.bmp"
+IDB_BITMAP_UID3         BITMAP                  "BaiLan\\resource\\png\\uid3.bmp"
+IDB_BITMAP_UID4         BITMAP                  "BaiLan\\resource\\png\\uid4.bmp"
+IDB_BITMAP_UID5         BITMAP                  "BaiLan\\resource\\png\\uid5.bmp"
+IDB_BITMAP_UID6         BITMAP                  "BaiLan\\resource\\png\\uid6.bmp"
+IDB_BITMAP_UID7         BITMAP                  "BaiLan\\resource\\png\\uid7.bmp"
+IDB_BITMAP_UID8         BITMAP                  "BaiLan\\resource\\png\\uid8.bmp"
+IDB_BITMAP_UID9         BITMAP                  "BaiLan\\resource\\png\\uid9.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// PNG
+//
+
+IDB_PNG_GIMAP           PNG                     "BaiLan\\resource\\GIMAP.png"
+
+#endif    // ����(���壬�й�) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+
