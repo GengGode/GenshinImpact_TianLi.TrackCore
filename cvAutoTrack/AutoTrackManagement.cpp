@@ -90,19 +90,7 @@ void AutoTrackManagement::service() {
                 std::any asd=tasks[0]->getOutputValue();
 
 
-                try
-                {
-                    HWND asdasd=std::any_cast<HWND>(asd);
-                    log->Info(std::to_string((long long int)asdasd));
-                }
-                catch (const std::bad_any_cast& e)
-                {
-                    log->Error("获取任务结果失败"+ std::string(e.what()));
-                }
-                catch (std::exception& e)
-                {
-                    log->Error("获取任务结果失败"+ std::string(e.what()));
-                }
+
 
 
                 //TODO: 线程休眠
@@ -122,12 +110,18 @@ void AutoTrackManagement::service() {
 
 
 bool AutoTrackManagement::GetDirection(double &a) {
-    a = datas->_direction.a;
+    if(datas->_direction.result)
+    {
+        a = datas->_direction.a;
+    }
     return datas->_direction.result;
 }
 
 bool AutoTrackManagement::GetRotation(double &a2) {
-    a2 = datas->_rotation.a2;
+    if(datas->_rotation.result)
+    {
+        a2 = datas->_rotation.a2;
+    }
     return datas->_rotation.result;
 }
 
