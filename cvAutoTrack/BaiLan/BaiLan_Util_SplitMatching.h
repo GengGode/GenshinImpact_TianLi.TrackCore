@@ -17,14 +17,14 @@ class SplitMatching_Paimon  {
     std::mutex lm_output;
     std::mutex lm_input;
     cv::Mat _mat;
-    cv::Rect _rect;
+    cv::Mat _out_mat;
 public:
     SplitMatching_Paimon()=delete;
     SplitMatching_Paimon(const Logger& logService);
 public:
     void setValue(const cv::Mat &mat);
 
-    cv::Rect getValue();
+    cv::Mat getValue();
 
     bool getSplitMatching();
 
@@ -36,14 +36,14 @@ class SplitMatching_MiniMap {
     std::mutex lm_output;
     std::mutex lm_input;
     cv::Mat _mat;
-    cv::Rect _rect;
+    cv::Mat _out_mat;
 public:
     SplitMatching_MiniMap()=delete;
     SplitMatching_MiniMap(const Logger& logService);
 public:
     void setValue(const cv::Mat &mat);
 
-    cv::Rect getValue();
+    cv::Mat getValue();
 
     bool getSplitMatching();
 };
@@ -54,14 +54,14 @@ class SplitMatching_UID {
     std::mutex lm_output;
     std::mutex lm_input;
     cv::Mat _mat;
-    cv::Rect _rect;
+    cv::Mat _out_mat;
 public:
     SplitMatching_UID()=delete;
     SplitMatching_UID(const Logger& logService);
 public:
     void setValue(const cv::Mat &mat);
 
-    cv::Rect getValue();
+    cv::Mat getValue();
 
     bool getSplitMatching();
 };
@@ -72,14 +72,14 @@ class SplitMatching_LeftGetItems {
     std::mutex lm_output;
     std::mutex lm_input;
     cv::Mat _mat;
-    cv::Rect _rect;
+    cv::Mat _out_mat;
 public:
     SplitMatching_LeftGetItems()=delete;
     SplitMatching_LeftGetItems(const Logger& logService);
 public:
     void setValue(const cv::Mat &mat);
 
-    cv::Rect getValue();
+    cv::Mat getValue();
 
     bool getSplitMatching();
 };
@@ -90,14 +90,14 @@ class SplitMatching_RightGetItems {
     std::mutex lm_output;
     std::mutex lm_input;
     cv::Mat _mat;
-    cv::Rect _rect;
+    cv::Mat _out_mat;
 public:
     SplitMatching_RightGetItems()=delete;
     SplitMatching_RightGetItems(const Logger& logService);
 public:
     void setValue(const cv::Mat &mat);
 
-    cv::Rect getValue();
+    cv::Mat getValue();
 
     bool getSplitMatching();
 };

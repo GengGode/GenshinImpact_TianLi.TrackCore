@@ -31,14 +31,14 @@ void SplitMatching_Paimon::setValue(const cv::Mat &mat) {
     }
 }
 
-cv::Rect SplitMatching_Paimon::getValue() {
+cv::Mat SplitMatching_Paimon::getValue() {
     std::lock_guard<std::mutex> lock(lm_output);
-    cv::Rect ret=_rect;
+    cv::Mat ret=_out_mat;
     return std::move(ret);
 }
 
 bool SplitMatching_Paimon::getSplitMatching() {
-    return getSplitMatching_Paimon(_mat,_rect);
+    return getSplitMatching_Paimon(_mat,_out_mat);
 }
 
 
@@ -68,14 +68,14 @@ void SplitMatching_MiniMap::setValue(const cv::Mat &mat) {
     }
 }
 
-cv::Rect SplitMatching_MiniMap::getValue() {
+cv::Mat SplitMatching_MiniMap::getValue() {
     std::lock_guard<std::mutex> lock(lm_output);
-    cv::Rect ret=_rect;
+    cv::Mat ret=_out_mat;
     return std::move(ret);
 }
 
 bool SplitMatching_MiniMap::getSplitMatching() {
-    return getSplitMatching_MiniMap(_mat,_rect);
+    return getSplitMatching_MiniMap(_mat,_out_mat);
 }
 
 
@@ -105,14 +105,14 @@ void SplitMatching_UID::setValue(const cv::Mat &mat) {
     }
 }
 
-cv::Rect SplitMatching_UID::getValue() {
+cv::Mat SplitMatching_UID::getValue() {
     std::lock_guard<std::mutex> lock(lm_output);
-    cv::Rect ret=_rect;
+    cv::Mat ret=_out_mat;
     return std::move(ret);
 }
 
 bool SplitMatching_UID::getSplitMatching() {
-    return getSplitMatching_UID(_mat,_rect);
+    return getSplitMatching_UID(_mat,_out_mat);
 }
 
 SplitMatching_LeftGetItems::SplitMatching_LeftGetItems(const Logger& logService)
@@ -141,14 +141,14 @@ void SplitMatching_LeftGetItems::setValue(const cv::Mat &mat) {
     }
 }
 
-cv::Rect SplitMatching_LeftGetItems::getValue() {
+cv::Mat SplitMatching_LeftGetItems::getValue() {
     std::lock_guard<std::mutex> lock(lm_output);
-    cv::Rect ret=_rect;
+    cv::Mat ret=_out_mat;
     return std::move(ret);
 }
 
 bool SplitMatching_LeftGetItems::getSplitMatching() {
-    return getSplitMatching_LeftGetItems(_mat,_rect);
+    return getSplitMatching_LeftGetItems(_mat,_out_mat);
 }
 
 SplitMatching_RightGetItems::SplitMatching_RightGetItems(const Logger& logService)
@@ -177,12 +177,12 @@ void SplitMatching_RightGetItems::setValue(const cv::Mat &mat) {
     }
 }
 
-cv::Rect SplitMatching_RightGetItems::getValue() {
+cv::Mat SplitMatching_RightGetItems::getValue() {
     std::lock_guard<std::mutex> lock(lm_output);
-    cv::Rect ret=_rect;
+    cv::Mat ret=_out_mat;
     return std::move(ret);
 }
 
 bool SplitMatching_RightGetItems::getSplitMatching() {
-    return getSplitMatching_RightGetItems(_mat,_rect);
+    return getSplitMatching_RightGetItems(_mat, _out_mat);
 }
