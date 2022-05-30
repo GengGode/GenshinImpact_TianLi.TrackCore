@@ -77,8 +77,8 @@ bool LoadPNG2Mat(cv::Mat& _mat)
         
         HBitmap2Mat(bitmap, _mat);
         
-        buffer.resize(0);
-        buffer.reserve(0);
+        // buffer.resize(0);
+        // buffer.reserve(0);
         
         DeleteObject(bitmap);
     }

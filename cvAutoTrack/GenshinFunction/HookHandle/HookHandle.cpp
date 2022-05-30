@@ -10,11 +10,11 @@ HookHandle::HookHandle(const Logger& logService) {
     log = logService;
     _hookers.push_back(std::make_unique<Hooker_YuanShen>());
     _hookers.push_back(std::make_unique<Hooker_TengXunYunYouXi>());
-    log->Log("原神句柄模块加载");
+    log->log("原神句柄模块加载");
 }
 
 HookHandle::~HookHandle() {
-    log->Log("原神句柄模块卸载");
+    log->log("原神句柄模块卸载");
 }
 
 void HookHandle::getValue(HWND &handle) {

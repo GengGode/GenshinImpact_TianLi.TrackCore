@@ -49,4 +49,79 @@ public:
     bool getMatchOutput();
 };
 
+class Matching_UID
+{
+    Logger log;
+    int err=0;
+    std::mutex lm_output;
+    std::mutex lm_input;
+    cv::Mat _mat;
+    int _out_value;
+public:
+    Matching_UID()=delete;
+    Matching_UID(const Logger& logService);
+public:
+    void setValue(const cv::Mat &mat);
+    
+    int getValue();
+    
+    bool getMatchOutput();
+private:
+    struct Matching_UID_Resource
+    {
+        cv::Mat UID;
+        std::vector<cv::Mat> UIDnumber;
+    };
+    int getMaxID(double lis[], int len)
+    {
+        int maxId = 0;
+        for (int i = 1; i < len; i++)
+        {
+            if (lis[i] > lis[maxId])
+            {
+                maxId = i;
+            }
+        }
+        return maxId;
+    }
+};
+
+class Matching_LeftGetItems
+{
+    Logger log;
+    int err=0;
+    std::mutex lm_output;
+    std::mutex lm_input;
+    cv::Mat _mat;
+    std::string _out_value;
+public:
+    Matching_LeftGetItems()=delete;
+    Matching_LeftGetItems(const Logger& logService);
+public:
+    void setValue(const cv::Mat &mat);
+    
+    std::string getValue();
+    
+    bool getMatchOutput();
+};
+
+class Matching_RightGetItems
+{
+    Logger log;
+    int err=0;
+    std::mutex lm_output;
+    std::mutex lm_input;
+    cv::Mat _mat;
+    std::string _out_value;
+public:
+    Matching_RightGetItems()=delete;
+    Matching_RightGetItems(const Logger& logService);
+public:
+    void setValue(const cv::Mat &mat);
+    
+    std::string getValue();
+    
+    bool getMatchOutput();
+};
+
 #endif //CVAUTOTRACKDLL_BAILAN_UTIL_MATCHING_H

@@ -16,22 +16,22 @@ void AutoTrackManagement::createTasks() {
     //tasks.push_back(std::make_unique<TaskInstance>());
 
     //task[0].slot(task[1].signal(),HWND);
-
-    log->Log("任务线程全部初始化完成");
+    
+    log->log("任务线程全部初始化完成");
 }
 
 void AutoTrackManagement::beginTasks() {
     for (auto &task : tasks) {
         task->beginTask();
     }
-    log->Log("开始任务列表");
+    log->log("开始任务列表");
 }
 
 void AutoTrackManagement::endTasks() {
     for (auto &task : tasks) {
         task->endTask();
     }
-    log->Log("任务线程全部结束");
+    log->log("任务线程全部结束");
 }
 
 AutoTrackManagement::AutoTrackManagement() {
@@ -45,11 +45,11 @@ AutoTrackManagement::AutoTrackManagement() {
     try
     {
         _thread=new std::thread(&AutoTrackManagement::service,this);
-        log->Log("管理主线程创建成功");
+        log->log("管理主线程创建成功");
     }
     catch (std::exception &e)
     {
-        log->Error("线程创建失败 " + std::string(e.what()));
+        log->error("线程创建失败 " + std::string(e.what()));
     }
     _isRunService=true;
 }
@@ -63,19 +63,19 @@ AutoTrackManagement::~AutoTrackManagement() {
 }
 
 bool AutoTrackManagement::startService() {
-    log->Log("开启服务");
+    log->log("开启服务");
     _isStartService=true;
     return true;
 }
 
 bool AutoTrackManagement::stopService() {
-    log->Log("停止服务");
+    log->log("停止服务");
     _isStartService=false;
     return true;
 }
 
 void AutoTrackManagement::service() {
-    log->Log("进入服务主线程");
+    log->log("进入服务主线程");
     // 任务循环是否继续
     while(_isRunService)
     {
@@ -104,7 +104,7 @@ void AutoTrackManagement::service() {
             std::this_thread::sleep_for(std::chrono::seconds (1));
         }
     }
-    log->Log("结束服务主线程");
+    log->log("结束服务主线程");
 }
 
 

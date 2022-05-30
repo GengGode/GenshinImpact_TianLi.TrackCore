@@ -19,29 +19,37 @@
 
 //#define CVAUTOTRACK_API
 
-// 这是已导出的函数。
-
 
 extern "C" CVAUTOTRACK_API bool startService();
 extern "C" CVAUTOTRACK_API bool stopService();
+extern "C" CVAUTOTRACK_API bool init();
+extern "C" CVAUTOTRACK_API bool uninit();
 
-// extern "C" CVAUTOTRACK_API bool init();
-// extern "C" CVAUTOTRACK_API bool uninit();
-// extern "C" CVAUTOTRACK_API bool SetHandle(long long int handle);
-// extern "C" CVAUTOTRACK_API bool SetWorldCenter(double x, double y);
-// extern "C" CVAUTOTRACK_API bool SetWorldScale(double scale);
+// 下版本弃用
+extern "C" CVAUTOTRACK_API bool SetHandle(long long int handle);
+extern "C" CVAUTOTRACK_API bool SetWorldCenter(double x, double y);
+extern "C" CVAUTOTRACK_API bool SetWorldScale(double scale);
 
-
-// extern "C" CVAUTOTRACK_API bool GetTransform(double& x, double& y, double& a);
-// extern "C" CVAUTOTRACK_API bool GetPosition(double& x, double& y);
+//异步
+extern "C" CVAUTOTRACK_API bool GetTransform(double& x, double& y, double& a);
+extern "C" CVAUTOTRACK_API bool GetPosition(double& x, double& y);
 extern "C" CVAUTOTRACK_API bool GetDirection(double& a);
 extern "C" CVAUTOTRACK_API bool GetRotation(double& a2);
-// extern "C" CVAUTOTRACK_API bool GetStar(double &x, double &y, bool &isEnd);
+extern "C" CVAUTOTRACK_API bool GetStar(double &x, double &y, bool &isEnd);
 extern "C" CVAUTOTRACK_API bool GetStarJson(char *jsonBuff);
-// extern "C" CVAUTOTRACK_API bool GetUID(int &uid);
+extern "C" CVAUTOTRACK_API bool GetUID(int& uid);
+// extern "C" CVAUTOTRACK_API bool GetItemsLeft(char* jsonBuff);
+// extern "C" CVAUTOTRACK_API bool GetItemsRight(char *jsonBuff);
 
-// extern "C" CVAUTOTRACK_API bool GetInfoLoadPicture(char* path, int &uid, double &x, double &y, double &a);
-// extern "C" CVAUTOTRACK_API bool GetInfoLoadVideo(char* path, char* pathOutFile);
+// 阻塞
+extern "C" CVAUTOTRACK_API bool GetTransformBlock(double& x, double& y, double& a, int map_id);
+extern "C" CVAUTOTRACK_API bool GetPositionBlock(double& x, double& y);
+extern "C" CVAUTOTRACK_API bool GetDirectionBlock(double& a);
+
+// 其他
+extern "C" CVAUTOTRACK_API bool GetInfoLoadPicture(char* path, int  &uid,double &x, double &y, double &a);
+extern "C" CVAUTOTRACK_API bool GetInfoLoadVideo(char* path, char* pathOutFile);
+
 
 extern "C" CVAUTOTRACK_API int GetLastErr();
 

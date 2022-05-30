@@ -14,21 +14,25 @@ public:
     {
         this->_objectMessage = "[ Management ]";
     }
-    void Log(std::string message)
+    void setLogLevel(LogLevel level)
     {
-        StandardOutputLogger::Log(  message );
+        this->_logLevel = level;
     }
-    void Info(std::string message)
+    void log(std::string message)
     {
-        StandardOutputLogger::Info(  message );
+        StandardOutputLogger::log(message);
     }
-    void Warning(std::string message)
+    void info(std::string message)
     {
-        StandardOutputLogger::Warning(  message );
+        StandardOutputLogger::info(message);
     }
-    void Error(std::string message)
+    void warning(std::string message)
     {
-        StandardOutputLogger::Error(  message );
+        StandardOutputLogger::warning(message);
+    }
+    void error(std::string message)
+    {
+        StandardOutputLogger::error(message);
     }
 };
 #endif //CVAUTOTRACKDLL_MANAGEMENTLOGGER_H

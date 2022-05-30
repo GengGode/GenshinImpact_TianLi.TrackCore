@@ -7,6 +7,7 @@
 
 #include "../Logger/LoggingFacility.h"
 #include "../Data/DataTypeBase.h"
+#include "BaiLan/BaiLan_Util_Resource.h"
 
 #include <iostream>
 #include <thread>
@@ -18,7 +19,7 @@
 class BaiLan {
 
     Logger log;
-
+    BaiLan_Util_Resource& res=BaiLan_Util_Resource::getInstance();
     std::thread *_thread = nullptr;
     std::atomic<bool> _isRunService;
     std::atomic<bool> _isStartService;
@@ -46,6 +47,22 @@ public:
 
     bool stopService();
 
+    bool init();
+
+    bool uninit();
+
+    bool load();
+    bool release();
+
+    bool SetHandle(long long int handle);
+
+    bool SetWorldCenter(double x, double y);
+
+    bool SetWorldScale(double scale);
+
+    bool GetTransform(double& x, double& y, double& a);
+
+    bool GetPosition(double &x, double &y);
     /// 获取角色朝向
     /// \param a 输出角色朝向
     /// \return 是否成功获取
@@ -53,8 +70,12 @@ public:
 
     bool GetRotation(double &a2);
 
-    bool GetStarJson(char *string);
+    bool GetStar(double& x, double& y, bool& isEnd);
 
+    bool GetStarJson(char *string);
+    
+    bool GetUID(int &uid);
+    
     bool GetLastError();
 
 private:
@@ -109,8 +130,10 @@ private:
     void get_GI_SplitArea_server();
 
 private:
-    //所有分发的共同激活信号
+    //一级分发的所有共同激活信号
     std::condition_variable _cv_get_split_matching;
+    
+//---------------------------------------------------------------------------------------
 private:
     //获取分发1——派蒙的识别区域
 
@@ -162,6 +185,7 @@ private:
     //获取分发5——右侧已捡取物品的识别区域
     void get_GI_Split_5_RightGetItemsArea_server();
 
+//-------------------------------------------------------------------------------
 private:
     void foo_test_show_Frame() const;
     
@@ -205,6 +229,71 @@ private:
     
     //识别分发3——UID的具体区域线程服务
     void get_GI_Matching_3_UID_Server();
+    
+private:
+    //识别分发4——左侧已获得物品列表的具体区域
+    std::condition_variable _cv_matching_leftgetitems;
+    std::string gi_MatchOutput_LeftGetItems;
+    std::thread *_t_get_GI_Matching_4_LeftGetItems;
+    std::mutex _mutex_Matching_4_LeftGetItems;
+    
+    //识别分发4——左侧已获得物品列表的具体区域线程服务
+    void get_GI_Matching_4_LeftGetItems_Server();
+
+private:
+    //识别分发5——右侧可捡取物品列表的具体区域
+    std::condition_variable _cv_matching_rightgetitems;
+    std::string gi_MatchOutput_RightGetItems;
+    std::thread *_t_get_GI_Matching_5_RightGetItems;
+    std::mutex _mutex_Matching_5_RightGetItems;
+    
+    //识别分发5——右侧已获得物品列表的具体区域线程服务
+    void get_GI_Matching_5_RightGetItems_Server();
+//----------------------------------------------------------------------
+// 二级分发
+// 1——角色位置         type cv::Point
+// 2——角色朝向         type double
+// 3——角色朝向2        type double
+// 4——神瞳             type std::string
+// 5——其他、下级分发    type json
+private:
+    //一级分发的所有共同激活信号
+    std::condition_variable _cv_get_II_split_matching;
+private:
+    //二级分发1——角色位置的计算
+    //std::condition_variable _cv_II_1_position;
+    cv::Point2d gi_II_Output_1_Position;
+    std::thread *_t_II_1_Position;
+    std::mutex _mutex_II_1_Position;
+    //二级分发1——角色位置的计算的线程服务
+    void get_GI_II_1_Position_Server();
+
+private:
+    //二级分发2——角色朝向的计算
+    //std::condition_variable _cv_II_2_direction;
+    double gi_II_Output_2_Direction;
+    std::thread *_t_II_2_Direction;
+    std::mutex _mutex_II_2_Direction;
+    //二级分发2——角色朝向的计算的线程服务
+    void get_GI_II_2_Direction_Server();
+
+private:
+    //二级分发3——角色朝向2的计算
+    //std::condition_variable _cv_II_3_rotation;
+    double gi_II_Output_3_Rotation;
+    std::thread *_t_II_3_Rotation;
+    std::mutex _mutex_II_3_Rotation;
+    //二级分发3——角色朝向2的计算的线程服务
+    void get_GI_II_3_Rotation_Server();
+
+private:
+    //二级分发4——神瞳的计算
+    //std::condition_variable _cv_II_4_starjson;
+    std::string gi_II_Output_4_StarJson;
+    std::thread *_t_II_4_StarJson;
+    std::mutex _mutex_II_4_StarJson;
+    //二级分发4——神瞳的计算的线程服务
+    void get_II_4_StarJson_Server();
 };
 
 #endif //CVAUTOTRACKDLL_BAILAN_H/

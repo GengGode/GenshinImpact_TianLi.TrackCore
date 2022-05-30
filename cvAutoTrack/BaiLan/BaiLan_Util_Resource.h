@@ -10,8 +10,15 @@
 
 class BaiLan_Util_Resource
 {
-public:
     BaiLan_Util_Resource();
+public:
+    BaiLan_Util_Resource(const BaiLan_Util_Resource&) = delete;
+    BaiLan_Util_Resource& operator=(const BaiLan_Util_Resource&) = delete;
+    static BaiLan_Util_Resource& getInstance()
+    {
+        static BaiLan_Util_Resource instance;
+        return instance;
+    }
     ~BaiLan_Util_Resource();
 
 public:
@@ -28,5 +35,6 @@ private:
     void StarRGBA2A();
     void UIDnumberRGBA2A();
 };
-static BaiLan_Util_Resource BaiLanResource;
+//static BaiLan_Util_Resource *BaiLanResource= BaiLan_Util_Resource::getInstance();
+#define BaiLanResource BaiLan_Util_Resource::getInstance()
 #endif //CVAUTOTRACKDLL_BAILAN_UTIL_RESOURCE_H

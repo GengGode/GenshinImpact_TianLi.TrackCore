@@ -30,25 +30,25 @@ public:
     TaskInstance(const Logger& logService)
     {
         log= logService;
-        _task=[=]{log->Warning("Void Task Function");};
+        _task=[=]{ log->warning("Void Task Function");};
     }
     void beginTask()
     {
-        log->Info("begin task");
+        log->info("begin task");
         _isRunService=true;
 
         try{
             _thread=new std::thread(&TaskInstance::run,this);
-            log->Log("Thread Create Success");
+            log->log("Thread Create Success");
         }
         catch (std::exception &e)
         {
-           log->Error("Thread Create Error"+std::string(e.what()));
+            log->error("Thread Create error" + std::string(e.what()));
         }
     }
     void run()
     {
-        log->Log("begin thread");
+        log->log("begin thread");
         // 任务循环是否继续
         while(_isRunService)
         {
@@ -67,7 +67,7 @@ public:
                 std::this_thread::sleep_for(std::chrono::microseconds (10));
             }
         }
-        log->Log("end thread");
+        log->log("end thread");
     }
     void endTask()
     {
@@ -75,7 +75,7 @@ public:
         _isStartService=false;
         if(_thread!= nullptr)_thread->join();
         delete _thread;
-        log->Info("end task");
+        log->info("end task");
     }
     bool isWorkEnd()
     {

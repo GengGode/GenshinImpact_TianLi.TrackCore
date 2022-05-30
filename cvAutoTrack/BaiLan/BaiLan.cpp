@@ -12,9 +12,10 @@
 
 BaiLan::BaiLan() {
     log = std::make_shared<StandardOutputLogger>();
-
+    
+    log->setLogLevel(LogLevel::Info);
     // 初始化摆烂
-    log->Log("开始摆烂... ...");
+    log->log("开始摆烂... ...");
     _thread = new std::thread(&BaiLan::service, this);
     _isRunService = true;
     createTasks();
@@ -27,28 +28,69 @@ BaiLan::~BaiLan() {
     _isStartService = false;
     _thread->join();
     delete _thread;
-    log->Log("管理主线程删除成功");
-    log->Log("结束摆烂... ...");
+    log->log("管理主线程删除成功");
+    log->log("结束摆烂... ...");
 }
 
 bool BaiLan::startService() {
-    log->Log("开启服务");
+    log->log("开启服务");
     _isStartService = true;
     return true;
 }
 
 bool BaiLan::stopService() {
-    log->Log("停止服务");
+    log->log("停止服务");
     _isStartService = false;
     return true;
 }
+bool BaiLan::init(){
+    return true;
+}
+bool BaiLan::uninit() {
+    return true;
+}
+bool BaiLan::load() {
+    return true;
+}
+bool BaiLan::release() {
+    return true;
+}
+bool BaiLan::SetHandle(long long int handle) {
+    return true;
+}
+bool BaiLan::SetWorldCenter(double x, double y) {
+    return true;
+}
+bool BaiLan::SetWorldScale(double scale) {
+    return true;
+}
 
+bool BaiLan::GetTransform(double& x, double& y, double& a)
+{
+    if(_transform.result)
+    {
+        x = _transform.x;
+        y = _transform.y;
+        a = _transform.a;
+    }
+
+    return _transform.result;
+}
+bool BaiLan::GetPosition(double &x,double &y){
+    if(_position.result)
+    {
+        x = _position.x;
+        y = _position.y;
+    }
+    log->log("结果"+std::to_string(_position.result)+"  获取位置: "+std::to_string(_position.x)+"  "+std::to_string(_position.y));
+    return _position.result;
+}
 bool BaiLan::GetDirection(double &a) {
     if(_direction.result)
     {
         a = _direction.a;
     }
-    log->Log("结果: "+std::to_string(_direction.result)+"  获取角度: "+std::to_string(_direction.a));
+    log->log("结果: " + std::to_string(_direction.result) + "  获取角度: " + std::to_string(_direction.a));
     return _direction.result;
 }
 
@@ -57,8 +99,13 @@ bool BaiLan::GetRotation(double &a2) {
     {
         a2 = _rotation.a2;
     }
-    log->Log("结果: "+ std::to_string(_rotation.result) +"  获取角度: "+std::to_string(a2));
+    log->log("结果: " + std::to_string(_rotation.result) + "  获取角度: " + std::to_string(a2));
     return _rotation.result;
+}
+
+bool BaiLan::GetStar(double& x, double& y, bool& isEnd)
+{
+    return false;
 }
 
 bool BaiLan::GetStarJson(char *string) {
@@ -69,8 +116,17 @@ bool BaiLan::GetLastError() {
     return false;
 }
 
+bool BaiLan::GetUID(int &uid) {
+    if(_uid.result)
+    {
+        uid = _uid.uid;
+    }
+    log->log("结果: " + std::to_string(_uid.result) + "  获取UID: " + std::to_string(_uid.uid));
+    return _uid.result;
+}
+
 void BaiLan::service() {
-    log->Log("进入服务主线程");
+    log->log("进入服务主线程");
     // 任务循环是否继续
     while (_isRunService) {
         std::unique_lock<std::mutex> unlck_get_signal(_mutex_get_signal);
@@ -88,7 +144,7 @@ void BaiLan::service() {
             //std::this_thread::sleep_for(std::chrono::milliseconds(3000));
         }
     }
-    log->Log("结束服务主线程");
+    log->log("结束服务主线程");
 }
 
 void BaiLan::createTasks() {
@@ -98,19 +154,28 @@ void BaiLan::beginTasks() {
     //TODO: 添加任务后需要添加代码的位置
 
     //创建所有子服务线程
-    _t_get_GI_Handle = new std::thread(&BaiLan::get_GI_Handle_server, this);
-    _t_get_GI_Frame = new std::thread(&BaiLan::get_GI_Frame_server, this);
+    _t_get_GI_Handle    = new std::thread(&BaiLan::get_GI_Handle_server, this);
+    _t_get_GI_Frame     = new std::thread(&BaiLan::get_GI_Frame_server, this);
     _t_get_GI_SplitArea = new std::thread(&BaiLan::get_GI_SplitArea_server, this);
     
-    _t_get_GI_Split_1_PaimonArea = new std::thread(&BaiLan::get_GI_Split_1_PaimonArea_server, this);
-    _t_get_GI_Split_2_MiniMapArea = new std::thread(&BaiLan::get_GI_Split_2_MiniMapArea_server, this);
-    _t_get_GI_Split_3_UIDArea = new std::thread(&BaiLan::get_GI_Split_3_UIDArea_server, this);
-    _t_get_GI_Split_4_LeftGetItemsArea = new std::thread(&BaiLan::get_GI_Split_4_LeftGetItemsArea_server, this);
+    _t_get_GI_Split_1_PaimonArea        = new std::thread(&BaiLan::get_GI_Split_1_PaimonArea_server, this);
+    _t_get_GI_Split_2_MiniMapArea       = new std::thread(&BaiLan::get_GI_Split_2_MiniMapArea_server, this);
+    _t_get_GI_Split_3_UIDArea           = new std::thread(&BaiLan::get_GI_Split_3_UIDArea_server, this);
+    _t_get_GI_Split_4_LeftGetItemsArea  = new std::thread(&BaiLan::get_GI_Split_4_LeftGetItemsArea_server, this);
     _t_get_GI_Split_5_RightGetItemsArea = new std::thread(&BaiLan::get_GI_Split_5_RightGetItemsArea_server, this);
 
     //初步识别部分
-    _t_get_GI_Matching_1_Paimon = new std::thread(&BaiLan::get_GI_Matching_1_Paimon_server,this);
-    _t_get_GI_Matching_2_MiniMap = new std::thread(&BaiLan::get_GI_Matching_2_MiniMap_Server,this);
+    _t_get_GI_Matching_1_Paimon        = new std::thread(&BaiLan::get_GI_Matching_1_Paimon_server,this);
+    _t_get_GI_Matching_2_MiniMap       = new std::thread(&BaiLan::get_GI_Matching_2_MiniMap_Server,this);
+    _t_get_GI_Matching_3_UID           = new std::thread(&BaiLan::get_GI_Matching_3_UID_Server,this);
+    _t_get_GI_Matching_4_LeftGetItems  = new std::thread(&BaiLan::get_GI_Matching_4_LeftGetItems_Server, this);
+    _t_get_GI_Matching_5_RightGetItems = new std::thread(&BaiLan::get_GI_Matching_5_RightGetItems_Server, this);
+    
+    //二级分发部分
+    _t_II_1_Position    = new std::thread(&BaiLan::get_GI_II_1_Position_Server,this);
+    _t_II_2_Direction   = new std::thread(&BaiLan::get_GI_II_2_Direction_Server,this);
+    _t_II_3_Rotation    = new std::thread(&BaiLan::get_GI_II_3_Rotation_Server,this);
+    _t_II_4_StarJson    = new std::thread(&BaiLan::get_II_4_StarJson_Server,this);
 }
 
 void BaiLan::endTasks() {
@@ -119,8 +184,22 @@ void BaiLan::endTasks() {
     _cv_get_handle.notify_all();
     _cv_get_frame.notify_all();
     _cv_get_splitarea.notify_all();
+    
     _cv_get_split_matching.notify_all();
-
+    
+    _cv_matching_paimon.notify_all();
+    _cv_matching_minimap.notify_all();
+    _cv_matching_uid.notify_all();
+    _cv_matching_leftgetitems.notify_all();
+    _cv_matching_rightgetitems.notify_all();
+    
+    _cv_get_II_split_matching.notify_all();
+    
+    // _cv_II_1_position.notify_all();
+    // _cv_II_2_direction.notify_all();
+    // _cv_II_3_rotation.notify_all();
+    // _cv_II_4_starjson.notify_all();
+    
     // 获取所有带锁变量的锁
     std::unique_lock<std::mutex> lock_output_giHandle(_mutex_GI_Handle);
     std::unique_lock<std::mutex> lock_output_giFrame(_mutex_GI_Frame);
@@ -132,6 +211,14 @@ void BaiLan::endTasks() {
     std::unique_lock<std::mutex> lock_output_split_5_rightGetItemsArea(_mutex_GI_Split_5_RightGetItemsArea);
     std::unique_lock<std::mutex> lock_output_matchoutput_1_paimon(_mutex_GI_Matching_1_Paimon);
     std::unique_lock<std::mutex> lock_output_matchoutput_2_minimap(_mutex_GI_Matching_2_MiniMap);
+    std::unique_lock<std::mutex> lock_output_matchoutput_3_uid(_mutex_GI_Matching_3_UID);
+    std::unique_lock<std::mutex> lock_output_matchoutput_4_leftgetitems(_mutex_Matching_4_LeftGetItems);
+    std::unique_lock<std::mutex> lock_output_matchoutput_5_rightgetitems(_mutex_Matching_5_RightGetItems);
+    std::unique_lock<std::mutex> lock_output_II_1_position(_mutex_II_1_Position);
+    std::unique_lock<std::mutex> lock_output_II_2_direction(_mutex_II_2_Direction);
+    std::unique_lock<std::mutex> lock_output_II_3_rotation(_mutex_II_3_Rotation);
+    std::unique_lock<std::mutex> lock_output_II_4_starjson(_mutex_II_4_StarJson);
+    
     
     // join 所有线程
     if (_t_get_GI_Handle != nullptr) {
@@ -166,19 +253,45 @@ void BaiLan::endTasks() {
     if(_t_get_GI_Matching_2_MiniMap!= nullptr){
         _t_get_GI_Matching_2_MiniMap->join();
     }
+    if(_t_get_GI_Matching_3_UID!= nullptr){
+        _t_get_GI_Matching_3_UID->join();
+    }
+    if(_t_get_GI_Matching_4_LeftGetItems != nullptr){
+        _t_get_GI_Matching_4_LeftGetItems->join();
+    }
+    if(_t_get_GI_Matching_5_RightGetItems != nullptr){
+        _t_get_GI_Matching_5_RightGetItems->join();
+    }
     
+    //二级分发
+    if(_t_II_1_Position!= nullptr)
+    {
+        _t_II_1_Position->join();
+    }
+    if(_t_II_2_Direction!= nullptr)
+    {
+        _t_II_2_Direction->join();
+    }
+    if(_t_II_3_Rotation!= nullptr)
+    {
+        _t_II_3_Rotation->join();
+    }
+    if(_t_II_4_StarJson!= nullptr)
+    {
+        _t_II_4_StarJson->join();
+    }
 }
 
 //进入获取原神句柄线程
 void BaiLan::get_GI_Handle_server() {
-    log->Log("进入获取原神句柄线程");
+    log->log("进入获取原神句柄线程");
     while (_isRunService) {
-        std:unique_lock<std::mutex> unlck_get_handle(_mutex_GI_Handle);
+        std::unique_lock<std::mutex> unlck_get_handle(_mutex_GI_Handle);
         // 等待信号, 如果没有信号, 则等待1秒
         _cv_get_handle.wait_for(unlck_get_handle, 1s, []()->bool {return false;});
         if (_isStartService)// 是否工作
         {
-            if( [&] () ->bool{return Get_GI_Handle(gi_Handle);}())
+            if( [&] () ->bool{return Get_GI_Handle(log,gi_Handle);}())
             {//获取原神句柄：成功
                 
                 //触发获取原神截图
@@ -192,7 +305,7 @@ void BaiLan::get_GI_Handle_server() {
                 
                 //获取失败后需要重新运行上一步
                 //触发获取原神句柄
-                log->Info("获取原神句柄：失败，触发获取原神句柄");
+                log->info("获取原神句柄：失败，触发获取原神句柄");
                 //_cv_get_handle.notify_all();
             }
         }
@@ -200,7 +313,7 @@ void BaiLan::get_GI_Handle_server() {
 }
 //进入获取原神截图线程
 void BaiLan::get_GI_Frame_server() {
-    log->Info("进入获取原神截图线程");
+    log->info("进入获取原神截图线程");
     while (_isRunService)
     {
         std::unique_lock<std::mutex> uniqueLock(_mutex_GI_Handle);
@@ -215,7 +328,7 @@ void BaiLan::get_GI_Frame_server() {
             
             if(_is_always_get_GI_Frame && [&]()->bool{
                 std::unique_lock<std::mutex> lock_output(_mutex_GI_Frame);
-                return Get_GI_Frame(gi_Handle, gi_Frame);
+                return Get_GI_Frame(log, gi_Handle, gi_Frame);
             }())
             {
                 // 触发下一步，通知拆分分发
@@ -231,13 +344,15 @@ void BaiLan::get_GI_Frame_server() {
                 //     std::this_thread::sleep_for(std::chrono::milliseconds(need_wait_ms));
                 //     log->Log("need_wait_ms: "+std::to_string(static_cast<int>(need_wait_ms)));
                 // }
-                //std::this_thread::sleep_for(33ms);
+                
+                //TODO: 需要测试是否真的需要加延时，不加延时为什么会卡
+                std::this_thread::sleep_for(1ms);
             }
             else
             {
                 // 截图失败，重新获取句柄并等待100毫秒
                 _cv_get_handle.notify_all();
-                log->Info("截图失败，重新获取句柄");
+                log->info("截图失败，重新获取句柄");
                 // 等待100毫秒
                 std::this_thread::sleep_for(1ms);
                 break;
@@ -249,7 +364,7 @@ void BaiLan::get_GI_Frame_server() {
 }
 //进入获取截图拆分线程
 void BaiLan::get_GI_SplitArea_server() {
-    log->Info("进入获取截图拆分线程");
+    log->info("进入获取截图拆分线程");
     while (_isRunService)
     {
         std::unique_lock<std::mutex> uniqueLock(_mutex_GI_Frame);
@@ -258,7 +373,7 @@ void BaiLan::get_GI_SplitArea_server() {
         if (_isStartService) {
             if( [&]()->bool{
                 std::unique_lock<std::mutex> lock_output(_mutex_GI_SplitArea);
-                return Get_GI_SplitArea(gi_Frame, gi_SplitArea);
+                return Get_GI_SplitArea(log, gi_Frame, gi_SplitArea);
             }())
             {
                 //foo_test_show_Frame();
@@ -268,14 +383,14 @@ void BaiLan::get_GI_SplitArea_server() {
             else
             {
                 //_cv_get_frame.notify_all();
-                log->Info("back frame.notify_all() form Get_GI_SplitArea");
+                log->info("back frame.notify_all() form Get_GI_SplitArea");
             }
         }
     }
 }
 //进入获取分发1——派蒙的识别区域线程
 void BaiLan::get_GI_Split_1_PaimonArea_server() {
-    log->Info("进入获取分发1——派蒙的识别区域线程");
+    log->info("进入获取分发1——派蒙的识别区域线程");
     while (_isRunService)
     {
         std::unique_lock<std::mutex> uniqueLock(_mutex_GI_SplitArea);
@@ -284,7 +399,7 @@ void BaiLan::get_GI_Split_1_PaimonArea_server() {
         {
             if([&]() -> bool {
                 std::unique_lock<std::mutex> lock_output(_mutex_GI_Split_1_PaimonArea);
-                return Get_GI_SplitMatching_1_PaimonArea(gi_SplitArea[0], gi_Area_Paimon);
+                return Get_GI_SplitMatching_1_PaimonArea(log, gi_SplitArea[0], gi_Area_Paimon);
             }())
             {
                 //foo_test_show_PaimonArea();
@@ -294,74 +409,76 @@ void BaiLan::get_GI_Split_1_PaimonArea_server() {
             else
             {
                 //_cv_get_splitarea.notify_all();
-                log->Info("back splitarea.notify_all() form Get_GI_SplitMatching_1_PaimonArea");
+                log->info("back splitarea.notify_all() form Get_GI_SplitMatching_1_PaimonArea");
             }
         }
     }
 }
 //进入获取分发2——小地图的识别区域线程
 void BaiLan::get_GI_Split_2_MiniMapArea_server() {
-    log->Info("进入获取分发2——小地图的识别区域线程");
+    log->info("进入获取分发2——小地图的识别区域线程");
     while (_isRunService) {
         std::unique_lock<std::mutex> uniqueLock(_mutex_GI_SplitArea);
         _cv_get_split_matching.wait(uniqueLock);
         if (_isStartService) {
            if([&]()->bool{
                std::unique_lock<std::mutex> lock_output(_mutex_GI_Split_2_MiniMapArea);
-                return Get_GI_SplitMatching_2_MiniMapArea(gi_SplitArea[1], gi_Area_MiniMap);
+                return Get_GI_SplitMatching_2_MiniMapArea(log, gi_SplitArea[1], gi_Area_MiniMap);
             }())
            {
                //foo_test_show_MiniMapArea();
                //TODO: 分图之后的识别
                _cv_matching_minimap.notify_all();
-               //log->Log("split_Rect.notify_one() TODO:");
+               //log->error("split_Rect.notify_one() TODO:");
            }
            else
            {
                //_cv_get_splitarea.notify_all();
-               log->Info("back splitarea.notify_all() form Get_GI_SplitMatching_2_MiniMapArea");
+               log->info("back splitarea.notify_all() form Get_GI_SplitMatching_2_MiniMapArea");
            }
         }
     }
 }
 //进入获取分发3——UID的识别区域线程
 void BaiLan::get_GI_Split_3_UIDArea_server() {
-    log->Info("进入获取分发3——UID的识别区域线程");
+    log->info("进入获取分发3——UID的识别区域线程");
     while (_isRunService) {
         std::unique_lock<std::mutex> uniqueLock(_mutex_GI_SplitArea);
         _cv_get_split_matching.wait(uniqueLock);
         if (_isStartService) {
             if( [&]()->bool{
                 std::unique_lock<std::mutex> lock_output(_mutex_GI_Split_3_UIDArea);
-                return Get_GI_SplitMatching_3_UIDArea(gi_SplitArea[2], gi_Area_UID);
+                return Get_GI_SplitMatching_3_UIDArea(log, gi_SplitArea[2], gi_Area_UID);
             }())
             {
                 //foo_test_show_UIDArea();
                 //TODO: 分图之后的识别
                 //_cv_get_split_Rect_.notify_all();
                 //log->Log("split_Rect.notify_one() TODO:");
+    
+                _cv_matching_uid.notify_all();
             }
             else
             {
                 //_cv_get_splitarea.notify_all();
-                log->Info("back splitarea.notify_all() form Get_GI_SplitMatching_3_UIDArea");
+                log->info("back splitarea.notify_all() form Get_GI_SplitMatching_3_UIDArea");
             }
         }
     }
 }
 //进入获取分发4——矩形区域的识别区域线程
 void BaiLan::get_GI_Split_4_LeftGetItemsArea_server() {
-    log->Info("进入获取分发4——左侧获取物品区域线程");
+    log->info("进入获取分发4——左侧获取物品区域线程");
     while (_isRunService) {
         std::unique_lock<std::mutex> uniqueLock(_mutex_GI_SplitArea);
         _cv_get_split_matching.wait(uniqueLock);
         if (_isStartService ) {
             if ( [&]()->bool{
                 std::unique_lock<std::mutex> lock_output(_mutex_GI_Split_4_LeftGetItemsArea);
-                return Get_GI_SplitMatching_4_LeftGetItemsArea(gi_SplitArea[3], gi_Area_LeftGetItems);
+                return Get_GI_SplitMatching_4_LeftGetItemsArea(log, gi_SplitArea[3], gi_Area_LeftGetItems);
             }())
             {
-                //foo_test_show_LeftGetItemsArea();
+                foo_test_show_LeftGetItemsArea();
                 //TODO: 分图之后的识别
                 //_cv_get_split_Rect_.notify_all();
                 //log->Log("split_Rect.notify_one() TODO:");
@@ -369,21 +486,21 @@ void BaiLan::get_GI_Split_4_LeftGetItemsArea_server() {
             else
             {
                 //_cv_get_splitarea.notify_all();
-                log->Info("back splitarea.notify_all() form Get_GI_SplitMatching_4_LeftGetItemsArea");
+                log->info("back splitarea.notify_all() form Get_GI_SplitMatching_4_LeftGetItemsArea");
             }
         }
     }
 }
 //进入获取分发5——右侧获取物品区域线程
 void BaiLan::get_GI_Split_5_RightGetItemsArea_server() {
-    log->Info("进入获取分发5——右侧获取物品区域线程");
+    log->info("进入获取分发5——右侧获取物品区域线程");
     while (_isRunService) {
         std::unique_lock<std::mutex> uniqueLock(_mutex_GI_SplitArea);
         _cv_get_split_matching.wait(uniqueLock);
         if (_isStartService) {
             if([&]()->bool{
                     std::unique_lock<std::mutex> lock_output(_mutex_GI_Split_5_RightGetItemsArea);
-                return Get_GI_SplitMatching_5_RightGetItemsArea(gi_SplitArea[4], gi_Area_RightGetItems);
+                return Get_GI_SplitMatching_5_RightGetItemsArea(log, gi_SplitArea[4], gi_Area_RightGetItems);
             }())
             {
                 //foo_test_show_RightGetItemsArea();
@@ -394,7 +511,7 @@ void BaiLan::get_GI_Split_5_RightGetItemsArea_server() {
             else
             {
                 //_cv_get_splitarea.notify_all();
-                log->Info("back splitarea.notify_all() form Get_GI_SplitMatching_5_RightGetItemsArea");
+                log->info("back splitarea.notify_all() form Get_GI_SplitMatching_5_RightGetItemsArea");
             }
         }
     }
@@ -503,7 +620,7 @@ void BaiLan::foo_test_show_MiniMapArea() {
     }
     catch (exception &e)
     {
-        log->Error("get_GI_Split_2_MiniMapArea_server error:" + string(e.what()));
+        log->error("get_GI_Split_2_MiniMapArea_server error:" + string(e.what()));
     }
     vector<Mat> list;
     split(gi_SplitArea[1], list);
@@ -532,34 +649,35 @@ void BaiLan::foo_test_show_RightGetItemsArea() {
 
 //进入识别分发1——派蒙的具体区域线程
 void BaiLan::get_GI_Matching_1_Paimon_server() {
-    log->Info("进入识别分发1——派蒙的具体区域线程");
+    log->info("进入识别分发1——派蒙的具体区域线程");
     while (_isRunService) {
         std::unique_lock<std::mutex> uniqueLock(_mutex_GI_Split_1_PaimonArea);
         _cv_matching_paimon.wait(uniqueLock);
         if (_isStartService) {
             if( [&]()->bool{
                 std::unique_lock<std::mutex> lock_output(_mutex_GI_Matching_1_Paimon);
-                return Get_GI_Matching_1_Paimon(gi_Area_Paimon, gi_MatchOutput_Paimon);
+                return Get_GI_Matching_1_Paimon(log, gi_Area_Paimon, gi_MatchOutput_Paimon);
             }())
             {
                 //TODO:输出识别到的变量
                 isShowPaimon=gi_MatchOutput_Paimon;
-                log->Info("识别到的结果: 派蒙是否存在 "+std::to_string(gi_MatchOutput_Paimon));
+                //log->info("识别到的结果: 派蒙是否存在 " + std::to_string(gi_MatchOutput_Paimon));
                 //foo_test_show_PaimonArea();
             }
             else
             {
                 //_cv_get_splitarea.notify_all();
                 isShowPaimon=false;
-                log->Info("识别到的结果: 派蒙是否存在 0");
+                //log->info("识别到的结果: 派蒙是否存在 0");
             }
         }
     }
 }
-//TODO: 转换为
+//TODO: 转换为SplitMiniMap
 //进入识别分发2——小地图的具体区域线程
 void BaiLan::get_GI_Matching_2_MiniMap_Server() {
-    log->Info("进入识别分发2——小地图的具体区域线程");
+    log->info("进入识别分发2——小地图的具体区域线程");
+    /*
     while(_isRunService)
     {
         std::unique_lock<std::mutex> uniqueLock(_mutex_GI_Split_2_MiniMapArea);
@@ -568,7 +686,7 @@ void BaiLan::get_GI_Matching_2_MiniMap_Server() {
         {
             if([&]()->bool{
                std::unique_lock<std::mutex> lock_output(_mutex_GI_Matching_2_MiniMap) ;
-               return Get_GI_Matching_2_MiniMap(gi_Area_MiniMap,gi_MatchOutput_MiniMap);
+               return Get_GI_Matching_2_MiniMap(log,gi_Area_MiniMap,gi_MatchOutput_MiniMap);
             }())
             {
                 //TODO: 02.26-03:00 输出结果到缓存变量
@@ -579,7 +697,172 @@ void BaiLan::get_GI_Matching_2_MiniMap_Server() {
             }
         }
     }
+    */
+    std::this_thread::sleep_for(std::chrono::milliseconds(1));
 }
 
+//进入识别分发3——UID的具体区域线程
+void BaiLan::get_GI_Matching_3_UID_Server() {
+    log->info("进入识别分发3——UID的具体区域线程");
+    while(_isRunService){
+        std::unique_lock<std::mutex> uniqueLock(_mutex_GI_Split_3_UIDArea);
+        _cv_matching_uid.wait(uniqueLock);
+        if(_isStartService){
+            if([&]()->bool{
+                std::unique_lock<std::mutex> lock_output(_mutex_GI_Matching_3_UID);
+                return Get_GI_Matching_3_UID(log, gi_Area_UID,gi_MatchOutput_UID);
+            }())
+            {
+                _uid.uid=gi_MatchOutput_UID;
+                _uid.result= true;
+            }
+            else
+            {
+                _uid.result= false;
+            }
+        }
+    }
+}
+//进入识别分发4——侧已获得物品列表的具体区域线程
+void BaiLan::get_GI_Matching_4_LeftGetItems_Server() {
+    log->info("进入识别分发4——侧已获得物品列表的具体区域线程");
+    while (_isRunService){
+        std::unique_lock<std::mutex> uniqueLock(_mutex_GI_Split_4_LeftGetItemsArea);
+        _cv_matching_leftgetitems.wait(uniqueLock);
+        if(_isStartService){
+            if([&]()->bool{
+                std::unique_lock<std::mutex> lock_output(_mutex_Matching_4_LeftGetItems);
+                return Get_GI_Matching_4_LeftGetItems(log, gi_Area_LeftGetItems,gi_MatchOutput_LeftGetItems);
+            }())
+            {
+                // strcpy_s(_starJson.jsonBuff,255,gi_MatchOutput_LeftGetItems.c_str());
+                // _starJson.result= true;
+            }
+            else
+            {
+                //_starJson.result= false;
+            }
+            std::this_thread::sleep_for(std::chrono::milliseconds(1));
+        }
+    }
+}
+//进入识别分发5——右侧已获得物品列表的具体区域线程
+void BaiLan::get_GI_Matching_5_RightGetItems_Server() {
+    log->info("进入识别分发5——右侧已获得物品列表的具体区域线程");
+    while (_isRunService){
+        std::unique_lock<std::mutex> uniqueLock(_mutex_GI_Split_5_RightGetItemsArea);
+        _cv_matching_leftgetitems.wait(uniqueLock);
+        if(_isStartService){
+            if([&]()->bool{
+                std::unique_lock<std::mutex> lock_output(_mutex_Matching_5_RightGetItems);
+                return Get_GI_Matching_5_RightGetItems(log, gi_Area_LeftGetItems,gi_MatchOutput_RightGetItems);
+            }())
+            {
+                // strcpy_s(_starJson.jsonBuff,255,gi_MatchOutput_LeftGetItems.c_str());
+                // _starJson.result= true;
+            }
+            else
+            {
+                //_starJson.result= false;
+            }
+            
+            //等待1毫秒
+            std::this_thread::sleep_for(std::chrono::milliseconds(1));
+        }
+    }
+}
+//-----------------------------------------------------------------------------------
+//二级分发
 
+//进入二级分发1——角色位置的计算
+void BaiLan::get_GI_II_1_Position_Server() {
+    log->info("进入二级分发1——角色位置的计算");
+    while (_isRunService){
+        std::unique_lock<std::mutex> uniqueLock(_mutex_GI_Split_2_MiniMapArea);
+        _cv_matching_minimap.wait(uniqueLock);
+        if(_isStartService){
+            if([&]()->bool{
+                std::unique_lock<std::mutex> lock_output(_mutex_II_1_Position);
+                return Get_GI_II_1_Position(log, gi_Area_MiniMap,gi_II_Output_1_Position);
+            }())
+            {
+                _position.x = gi_II_Output_1_Position.x;
+                _position.y = gi_II_Output_1_Position.y;
+                _position.result = true;
+            }
+            else
+            {
+                _position.result = false;
+            }
+        }
+    }
+}
 
+//进入二级分发2——角色角度的计算
+void BaiLan::get_GI_II_2_Direction_Server() {
+    log->info("进入二级分发2——角色角度的计算");
+    while (_isRunService){
+        std::unique_lock<std::mutex> uniqueLock(_mutex_GI_Split_2_MiniMapArea);
+        _cv_matching_minimap.wait(uniqueLock);
+        if(_isStartService){
+            if([&]()->bool{
+                std::unique_lock<std::mutex> lock_output(_mutex_II_2_Direction);
+                return Get_GI_II_2_Direction(log, gi_Area_MiniMap,gi_II_Output_2_Direction);
+            }())
+            {
+                _direction.a=gi_II_Output_2_Direction;
+                _direction.result = true;
+            }
+            else
+            {
+                _direction.result = false;
+            }
+        }
+    }
+}
+
+//进入二级分发3——角色角度2的计算
+void BaiLan::get_GI_II_3_Rotation_Server() {
+    log->info("进入二级分发3——角色角度2的计算");
+    while (_isRunService){
+        std::unique_lock<std::mutex> uniqueLock(_mutex_GI_Split_2_MiniMapArea);
+        _cv_matching_minimap.wait(uniqueLock);
+        if(_isStartService){
+            if([&]()->bool{
+                std::unique_lock<std::mutex> lock_output(_mutex_II_3_Rotation);
+                return Get_GI_II_3_Rotation(log, gi_Area_MiniMap,gi_II_Output_3_Rotation);
+            }())
+            {
+                _rotation.a2=gi_II_Output_3_Rotation;
+                _rotation.result = true;
+            }
+            else
+            {
+                _rotation.result = false;
+            }
+        }
+    }
+}
+
+//进入二级分发4——神瞳的计算
+void BaiLan::get_II_4_StarJson_Server() {
+    log->info("进入二级分发4——神瞳的计算");
+    while (_isRunService){
+        std::unique_lock<std::mutex> uniqueLock(_mutex_GI_Split_2_MiniMapArea);
+        _cv_matching_minimap.wait(uniqueLock);
+        if(_isStartService){
+            if([&]()->bool{
+                std::unique_lock<std::mutex> lock_output(_mutex_II_4_StarJson);
+                return Get_GI_II_4_StarJson(log, gi_Area_MiniMap,gi_II_Output_4_StarJson);
+            }())
+            {
+                strcpy_s(_starJson.jsonBuff,255,gi_II_Output_4_StarJson.c_str());
+                _starJson.result= true;
+            }
+            else
+            {
+                _starJson.result= false;
+            }
+        }
+    }
+}

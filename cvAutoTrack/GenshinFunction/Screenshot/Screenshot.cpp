@@ -6,7 +6,7 @@
 Screenshot::Screenshot(const Logger& logService)
 {
     log=logService;
-    log->Log("╫ьм╪дё©И╪сть");
+    log->log("╫ьм╪дё©И╪сть");
 }
 
 Screenshot::~Screenshot() {

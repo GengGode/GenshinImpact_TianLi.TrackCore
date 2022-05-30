@@ -23,12 +23,12 @@ public:
 	StandardOutputLogger(){
         _isRunning=true;
         _threadInstance=new std::thread(&StandardOutputLogger::listen,this);
-        Log("标准输出日志系统启动");
+        log("标准输出日志系统启动");
     }
 
     ~StandardOutputLogger()
     {
-        Log("标准输出日志系统关闭");
+        log("标准输出日志系统关闭");
 
         if(!_logQueue.empty())
         {
@@ -46,21 +46,30 @@ public:
 
     }
 
-    virtual void Log(std::string message)
+    virtual void setLogLevel(LogLevel level) override
     {
+        _logLevel = level;
+    }
+    
+    virtual void log(std::string message)
+    {
+        if( _logLevel > LogLevel::Log)return;
         push("[   log   ]"+_objectMessage+":" +message);
     }
-    virtual void Info(std::string message)
+    virtual void info(std::string message)
     {
+        if( _logLevel > LogLevel::Info)return;
         push("[  info   ]"+_objectMessage+":"+message);
     }
-    virtual void Warning(std::string message)
+    virtual void warning(std::string message)
     {
+        if( _logLevel > LogLevel::Warning)return;
         push("[ warning ]"+_objectMessage+":"+message);
     }
 
-    virtual void Error(std::string message )
+    virtual void error(std::string message )
     {
+        if( _logLevel > LogLevel::Error)return;
         push("[  error  ]" +_objectMessage+":"+ message) ;
     }
 
